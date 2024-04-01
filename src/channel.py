@@ -38,3 +38,55 @@ class Channel:
         """Выводит в консоль информацию о канале."""
         channel = youtube.channels().list(id=self.channel_id, part='id,snippet,statistics').execute()
         return channel
+
+    @classmethod
+    def get_service(cls):
+        """возвращ. объект для работы с YouTube API"""
+        api_service_name = "youtube"
+        api_version = "v3"
+        DEVELOPER_KEY = api_key
+        return build(api_service_name, api_version, developerKey=DEVELOPER_KEY)
+
+    def to_json(self, filename):
+        """сохран. в файл значения атрибутов экземпляра Channel"""
+        with open(filename, 'w') as f:
+            json.dump({
+                'channel_id': self.channel_id,
+                'title': self.title,
+                'description': self.description,
+                'custom_url': self.url,
+                'subscriber_count': self.subscriber_count,
+                'video_count': self.video_count,
+                'view_count': self.view_count
+            }, f)
+
+    def __str__(self):
+        return f"{self.title} {self.url}"
+
+
+    def __add__(self, other):
+        return int(self.subscriber_count) + int(other.subscriber_count)
+
+
+    def __sub__(self, other):
+        return int(self.subscriber_count) - int(other.subscriber_count)
+
+
+    def __gt__(self, other):
+        return int(self.subscriber_count) > int(other.subscriber_count)
+
+
+    def __ge__(self, other):
+        return int(self.subscriber_count) >= int(other.subscriber_count)
+
+
+    def __lt__(self, other):
+        return int(self.subscriber_count) < int(other.subscriber_count)
+
+
+    def __le__(self, other):
+        return int(self.subscriber_count) <= int(other.subscriber_count)
+
+
+    def __eq__(self, other):
+        return int(self.subscriber_count) == int(other.subscriber_count)
